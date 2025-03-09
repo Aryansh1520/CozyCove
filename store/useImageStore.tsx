@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const SERVER_URL = "https://205a-205-254-166-47.ngrok-free.app";
+const SERVER_URL = "https://physically-relaxing-baboon.ngrok-free.app";
 
 interface ImageStore {
   images: any[];

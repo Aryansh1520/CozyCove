@@ -1,26 +1,22 @@
 import React, { useRef } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  PanResponder,
-  Animated,
-} from "react-native";
+import { View, Text, Dimensions, PanResponder, Animated } from "react-native";
+import { usePlayersOnline } from "hooks/usePlayersOnline";
 
 const { width, height } = Dimensions.get("window");
 
-const onlinePlayers = 2;
 const totalPlayers = 20;
 const radius = 30;
 const innerRadius = 27; 
 const segmentAngle = (2 * Math.PI) / totalPlayers; 
 
 const PlayerDoughnut = () => {
+  const { data, isLoading } = usePlayersOnline();
+  const onlinePlayers = isLoading ? 0 : data; // Default to 0 while loading
+
   const rotation = useRef(new Animated.Value(0)).current; 
   const lastRotation = useRef(0); 
   const lastAngle = useRef(0); 
 
-  
   const getAngle = (x, y) => {
     const dx = x - radius;
     const dy = y - radius;
@@ -31,7 +27,6 @@ const PlayerDoughnut = () => {
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onPanResponderGrant: (evt, gestureState) => {
-        // Store initial touch angle
         const { locationX, locationY } = evt.nativeEvent;
         lastAngle.current = getAngle(locationX, locationY);
       },
@@ -84,7 +79,7 @@ const PlayerDoughnut = () => {
             color: "white",
           }}
         >
-          {onlinePlayers} / {totalPlayers}
+          {isLoading ? "Loading..." : `${onlinePlayers ?? 0} / ${totalPlayers}`}
         </Text>
       </View>
 
@@ -107,7 +102,6 @@ const PlayerDoughnut = () => {
           ],
         }}
       >
-        {/* Generating segments dynamically */}
         {[...Array(totalPlayers)].map((_, i) => {
           const isFilled = i < onlinePlayers;
           const angle = i * segmentAngle;

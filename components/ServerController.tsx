@@ -16,11 +16,17 @@ import { useFonts, Inter_300Light, Inter_600SemiBold, Inter_700Bold, Inter_100Th
 import AppLoading from "expo-app-loading";
 import PlayerDoughnut from "./PlayerDoughnut";
 import GameModeSelector from "./GameModeSelector";
+import ShowCoordinatesToggle from "./ShowCoordinatesToggle";
+import { useServerStatus } from "../hooks/useServerStatus";
+import { useStartServer } from "../hooks/useStartServer";
+import { useStopServer } from "hooks/useStopServer";
+import { useBackupServer } from "hooks/useBackupServer";
+import { useRestartServer } from "hooks/useRestartServer";
+import { useUpdateServer } from "hooks/useUpdateServer";
 
 const { width, height } = Dimensions.get("window");
-
+import { useQueryClient } from "@tanstack/react-query";
 const ServerController = () => {
-  const [status, setStatus] = useState("Offline");
   let [fontsLoaded] = useFonts({
     Inter_300Light,
     Inter_600SemiBold,
@@ -34,6 +40,63 @@ const ServerController = () => {
   const bounceAnim = useRef(new Animated.Value(1)).current; // For button press effect
   const slideAnim = useRef(new Animated.Value(100)).current; // For sliding in bottom components
 
+  const { mutate: startServer, isPending: isStarting } = useStartServer();
+  const { mutate: stopServer, isPending: isStopping } = useStopServer();
+  const { data: status, isLoading: isChecking } = useServerStatus();
+  const [localStatus, setLocalStatus] = useState(status); // ✅ Temporary local state
+  
+  // ✅ Keep local status in sync with actual status
+  useEffect(() => {
+    if (!isStarting && !isStopping) {
+      setLocalStatus(status);
+    }
+  }, [status, isStarting, isStopping]);
+  
+  const isOnline = localStatus === "Online"; // ✅ Correctly reflect server status
+  
+  const [localOnline, setLocalOnline] = useState(isOnline); // ✅ Instant state update
+  const queryClient = useQueryClient(); // ✅ React Query client
+  
+  const handlePress = () => {
+    Animated.sequence([
+      Animated.timing(pulseAnim, { toValue: 1.2, duration: 100, useNativeDriver: true }),
+      Animated.timing(pulseAnim, { toValue: 1, duration: 100, useNativeDriver: true }),
+    ]).start();
+  
+    if (isOnline) {
+      setLocalOnline(false); // ✅ Instantly update the UI
+      stopServer(undefined, {
+        onSettled: () => queryClient.invalidateQueries(["serverStatus"]), // ✅ Force status refresh
+      });
+    } else {
+      setLocalOnline(true); // ✅ Instantly update the UI
+      startServer(undefined, {
+        onSettled: () => queryClient.invalidateQueries(["serverStatus"]), // ✅ Force status refresh
+      });
+    }
+  };
+
+
+  const { mutate: restartServer, isPending: isRestarting } = useRestartServer();
+const { mutate: backupServer, isPending: isBackingUp } = useBackupServer();
+const { mutate: updateServer, isPending: isUpdating } = useUpdateServer();
+
+const handleRestart = () => {
+  restartServer(undefined, {
+    onSettled: () => {
+      queryClient.invalidateQueries(["serverStatus"]);
+    },
+  });
+};
+
+const handleBackup = () => {
+  backupServer();
+};
+
+const handleUpdate = () => {
+  updateServer();
+};
+    
   useEffect(() => {
     // Fade-in animation
     Animated.timing(fadeAnim, {
@@ -95,7 +158,7 @@ const ServerController = () => {
       <Animated.View
         style={{
           width: width * 0.96,
-          height: height * 0.45,
+          height: height * 0.40,
           marginTop: height * 0.05,
           borderRadius: 45,
           overflow: "hidden",
@@ -125,84 +188,95 @@ const ServerController = () => {
                   marginLeft: 10,
                 }}
               >
-                Aryan Sharma
+                Keta Madhani
               </Text>
             </View>
 
             {/* Power Button with Pulsing Effect */}
             <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-              <TouchableOpacity>
-                <Icon name="power" size={32} color="red" />
-              </TouchableOpacity>
-            </Animated.View>
+  <TouchableOpacity 
+    onPress={handlePress} 
+    disabled={ isStarting || isStopping} // ✅ Only disable during API request
+  >
+    <Icon 
+      name={localOnline ? "power-off" : "power"}  // ✅ Uses local state for instant update
+      size={32} 
+      color={ isStopping ? "gray" : localOnline ? "green" : "red"} 
+    />
+  </TouchableOpacity>
+</Animated.View>
+
           </View>
 
           {/* Server Status */}
           <View className="w-full pt-8">
-            <Text
-              style={{
-                fontFamily: "Inter_300Light",
-                fontSize: 14,
-                color: "#B0B0B0",
-                marginBottom: 5,
-              }}
-            >
-              Server Status:
-            </Text>
-            <Text
-              style={{
-                fontFamily: "Inter_100Thin",
-                fontSize: 55,
-                color: "white",
-                marginTop: 5,
-              }}
-            >
-              {status}
-            </Text>
-          </View>
+      <Text
+        style={{
+          fontFamily: "Inter_300Light",
+          fontSize: 14,
+          color: "#B0B0B0",
+          marginBottom: 5,
+        }}
+      >
+        Server Status:
+      </Text>
+      <Text
+        style={{
+          fontFamily: "Inter_100Thin",
+          fontSize: 55,
+          color: "white",
+          marginTop: 5,
+        }}
+      >
+{isChecking ? "Checking..." : status ?? "Offline"}
+</Text>
+    </View>
 
           {/* Bottom Buttons with Labels */}
           <View className="w-full mt-auto items-center">
-            <View className="flex-row justify-between w-full">
-              {[
-                { icon: "cloud-upload", label: "Backup" },
-                { icon: "restart", label: "Restart" },
-                { icon: "backup-restore", label: "Reset" },
-                { icon: "update", label: "Update" },
-              ].map((item, index) => (
-                <View key={index} className="items-center">
-                  <Animated.View
-                    style={{
-                      transform: [{ scale: bounceAnim }],
-                    }}
-                  >
-                    <TouchableOpacity
-                      className="rounded-full flex items-center justify-center"
-                      style={{
-                        width: 55,
-                        height: 55,
-                        backgroundColor: "rgba(255, 255, 255, 0.1)",
-                      }}
-                      onPressIn={handlePressIn}
-                      onPressOut={handlePressOut}
-                    >
-                      <Icon name={item.icon} size={20} color="white" />
-                    </TouchableOpacity>
-                  </Animated.View>
-                  <Text
-                    style={{
-                      fontFamily: "Inter_300Light",
-                      fontSize: 12,
-                      color: "#B0B0B0",
-                      marginTop: 5,
-                    }}
-                  >
-                    {item.label}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
+    <View className="flex-row justify-between w-full">
+      {[
+        { icon: "cloud-upload", label: "Backup", action: handleBackup, isLoading: isBackingUp },
+        { icon: "restart", label: "Restart", action: handleRestart, isLoading: isRestarting },
+        { icon: "backup-restore", label: "Reset", action: () => console.log("Reset action") },
+        { icon: "update", label: "Update", action: handleUpdate, isLoading: isUpdating },
+      ].map((item, index) => (
+        <View key={index} className="items-center">
+          <Animated.View
+            style={{
+              transform: [{ scale: bounceAnim }],
+            }}
+          >
+            <TouchableOpacity
+              className="rounded-full flex items-center justify-center"
+              style={{
+                width: 55,
+                height: 55,
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+              }}
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
+              onPress={item.action}
+              disabled={item.isLoading}
+            >
+              <Icon name={item.icon} size={20} color={item.isLoading ? "gray" : "white"} />
+            </TouchableOpacity>
+          </Animated.View>
+          <Text
+            style={{
+              fontFamily: "Inter_300Light",
+              fontSize: 12,
+              color: "#B0B0B0",
+              marginTop: 5,
+            }}
+          >
+            {item.label}
+          </Text>
+        </View>
+      ))}
+    </View>
+  </View>
+
         </LinearGradient>
       </Animated.View>
 
@@ -215,6 +289,11 @@ const ServerController = () => {
       <Animated.View style={{ transform: [{ translateY: slideAnim }] }}>
         <GameModeSelector />
       </Animated.View>
+      <Animated.View style={{ transform: [{ translateY: slideAnim }] }}>
+        <ShowCoordinatesToggle/>
+      </Animated.View>
+
+
     </SafeAreaView>
   );
 };

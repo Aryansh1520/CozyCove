@@ -19,7 +19,7 @@ const Home = () => {
     }
   return (
     <SafeAreaView className="flex-1 bg-black">
-      <StatusBar backgroundColor="#000" barStyle="light-content" />
+      <StatusBar backgroundColor="#fff" barStyle="light-content" />
 
       {/* Profile Icon */}
       <View className="items-start px-5 pt-5 ">
@@ -69,14 +69,14 @@ const Home = () => {
     </View>
 
     {/* Left - Profile Icons & Tasks */}
-    <View className="absolute mt-20  left-5 space-y-3">
+    <View className="absolute mt-20  left-5 space-y-3 py-8 " >
       {/* Task 1 */}
-      <View className="flex-row items-center space-x-2">
+      <View className="flex-row items-center space-x-2 ">
         <Icon name="account-circle" size={32} color="white" />
         <Text className="text-white text-xs ml-2">Aryan Sharma</Text>
       </View>
       <Text
-        className="text-white text-[22px] ml-10 overflow-hidden"
+        className="text-white text-[22px] ml-10 overflow-hidden mb-5"
         numberOfLines={1}
         ellipsizeMode="tail"
       >
@@ -101,25 +101,28 @@ const Home = () => {
 
 
 
-      {/* Two Side-by-Side Cards */}
-      <View className="flex-row justify-between mt-5 px-5">
-        <View className="bg-[#141417] h-[65%] w-[48%] justify-center rounded-tl-[30] rounded-br-[30]">
-          <Text className="text-white text-center">Gallery</Text>
-        </View>
-        <View className="bg-[#141417] h-[65%] w-[48%] justify-center rounded-tl-[30] rounded-br-[30]">
-          <Text className="text-white text-center">PostCard</Text>
-        </View>
-      </View>
+<View className="px-5 gap-3">
+  {/* Large Gallery & PostCard */}
+  <View className="flex-row justify-between mt-10">
+    <View className="bg-[#141417] h-[150px] w-[48%] justify-center items-center rounded-tl-[30] rounded-br-[30] p-4">
+      <Text className="text-white text-center">Gallery</Text>
+    </View>
+    <View className="bg-[#141417] h-[150px] w-[48%] justify-center items-center rounded-tl-[30] rounded-br-[30] p-4">
+      <Text className="text-white text-center">PostCard</Text>
+    </View>
+  </View>
 
-      {/* Four Square Buttons */}
-      <View className="flex-row justify-between px-5 ">
-        <TouchableOpacity className="bg-[#141417] w-[48%] h-[45%] justify-center items-center rounded-lg">
-          <Text className="text-white text-center">Button 1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-[#141417] w-[48%] h-[45%] justify-center items-center rounded-lg">
-          <Text className="text-white text-center">Button 2</Text>
-        </TouchableOpacity>
-      </View>
+  {/* Smaller Buttons */}
+  <View className="flex-row justify-between">
+    <TouchableOpacity className="bg-[#141417] h-[80px] w-[48%] justify-center items-center rounded-[45]">
+      <Text className="text-white text-center">Button 1</Text>
+    </TouchableOpacity>
+    <TouchableOpacity className="bg-[#141417] h-[80px] w-[48%] justify-center items-center rounded-[45]">
+      <Text className="text-white text-center">Button 2</Text>
+    </TouchableOpacity>
+  </View>
+</View>
+
     </SafeAreaView>
   );
 };
