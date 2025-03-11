@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-const API_URL = "http://physically-relaxing-baboon.ngrok-free.app/players";
+const API_URL = "https://physically-relaxing-baboon.ngrok-free.app/players";
 
 export const usePlayersOnline = () => {
   return useQuery({

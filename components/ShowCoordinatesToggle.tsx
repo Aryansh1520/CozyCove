@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, Dimensions, ActivityIndicator } from "react-native";
 import { useToggleCoordinates } from "../hooks/useToggleCoordinates"; // Import the hook
 
-const { width, height } = Dimensions.get("window");
+const { width, height  } = Dimensions.get("window");
 
 const ToggleSwitch = () => {
   const [isOn, setIsOn] = useState(false);
@@ -38,8 +38,8 @@ const ToggleSwitch = () => {
       className="bg-[#141417] flex-row items-center justify-between px-5"
       style={{
         width: width * 0.96,
-        height: height * 0.1,
-        borderRadius: 45,
+        height: height * 0.12 -5,
+        borderRadius: 35,
         marginTop: height * 0.02,
       }}
     >

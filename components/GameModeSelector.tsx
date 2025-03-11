@@ -62,10 +62,10 @@ const GameModeSelector = () => {
 
   return (
     <View
-      className="bg-[#141417] items-center p-5"
+      className="bg-[#141417] items-center p-3"
       style={{
         width: width * 0.96,
-        height: height * 0.18,
+        height: height * 0.17,
         borderRadius: 45,
         marginTop: height * 0.02,
       }}

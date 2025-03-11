@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
-const API_URL = "http://physically-relaxing-baboon.ngrok-free.app/restart";
+const API_URL = "https://physically-relaxing-baboon.ngrok-free.app/restart";
 
 export const useRestartServer = () => {
   return useMutation({

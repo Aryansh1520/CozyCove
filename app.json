@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Cozy cOVE",
+    "name": "Cozy Cove",
     "slug": "LittleHome",
     "version": "1.0.0",
     "web": {
@@ -13,23 +13,25 @@
       "expo-font"
     ],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/playstore-icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.LittleHome"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.anonymous.LittleHome"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "491358f9-2048-46d4-9b54-fcde14976f52"
       }
     }
   }

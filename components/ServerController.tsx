@@ -24,7 +24,7 @@ import { useBackupServer } from "hooks/useBackupServer";
 import { useRestartServer } from "hooks/useRestartServer";
 import { useUpdateServer } from "hooks/useUpdateServer";
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("screen");
 import { useQueryClient } from "@tanstack/react-query";
 const ServerController = () => {
   let [fontsLoaded] = useFonts({
@@ -158,7 +158,7 @@ const handleUpdate = () => {
       <Animated.View
         style={{
           width: width * 0.96,
-          height: height * 0.40,
+          height: height * 0.38,
           marginTop: height * 0.05,
           borderRadius: 45,
           overflow: "hidden",
