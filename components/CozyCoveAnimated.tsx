@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Text as SvgText, Defs, Filter, FeGaussianBlur, FeMerge, FeMergeNode, FeColorMatrix } from 'react-native-svg';
 import * as Font from 'expo-font';
-import Animated, { useSharedValue, useAnimatedProps, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedProps, withTiming, withSequence, withRepeat, Easing } from 'react-native-reanimated';
 
 const AnimatedText = Animated.createAnimatedComponent(SvgText);
 const { width } = Dimensions.get('window');
@@ -25,12 +25,22 @@ const HandwrittenText = () => {
 
   useEffect(() => {
     if (isFontReady) {
-      strokeOffset.value = withTiming(0, {
-        duration: 3000,
-        easing: Easing.inOut(Easing.ease),
-      }, () => {
-        textColor.value = withTiming('#fc3400', { duration: 500 }); // Neon effect when complete
-      });
+      strokeOffset.value = withRepeat(
+        withSequence(
+          withTiming(0, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
+          withTiming(300, { duration: 3000, easing: Easing.inOut(Easing.ease) })
+        ),
+        -1, // Infinite loop
+        false // No reversing as we handle it manually in sequence
+      );
+
+      textColor.value = withRepeat(
+        withSequence(
+          withTiming('#fc3400', { duration: 3000 }),
+          withTiming('white', { duration: 3000 })
+        ),
+        -1
+      );
     }
   }, [isFontReady]);
 
@@ -63,7 +73,6 @@ const HandwrittenText = () => {
           fill="none"
           strokeWidth="2"
           strokeDasharray={300}
-          filter="url(#neonGlow)"
           animatedProps={animatedProps}
         >
           {text}

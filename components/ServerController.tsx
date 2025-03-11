@@ -23,6 +23,7 @@ import { useStopServer } from "hooks/useStopServer";
 import { useBackupServer } from "hooks/useBackupServer";
 import { useRestartServer } from "hooks/useRestartServer";
 import { useUpdateServer } from "hooks/useUpdateServer";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Storing login state
 
 const { width, height } = Dimensions.get("screen");
 import { useQueryClient } from "@tanstack/react-query";
@@ -44,9 +45,19 @@ const ServerController = () => {
   const { mutate: stopServer, isPending: isStopping } = useStopServer();
   const { data: status, isLoading: isChecking } = useServerStatus();
   const [localStatus, setLocalStatus] = useState(status); // ✅ Temporary local state
-  
+  const [userName, setUserName] = useState<string | null>(null);
+
+useEffect(() => {
+  const fetchUserName = async () => {
+    const storedUserName = await AsyncStorage.getItem("userName");
+    setUserName(storedUserName);
+  };
+
+  fetchUserName();
+}, []);
   // ✅ Keep local status in sync with actual status
   useEffect(() => {
+
     if (!isStarting && !isStopping) {
       setLocalStatus(status);
     }
@@ -188,7 +199,7 @@ const handleUpdate = () => {
                   marginLeft: 10,
                 }}
               >
-                Keta Madhani
+                {userName}
               </Text>
             </View>
 
