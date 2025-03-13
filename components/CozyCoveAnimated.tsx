@@ -27,8 +27,8 @@ const HandwrittenText = () => {
     if (isFontReady) {
       strokeOffset.value = withRepeat(
         withSequence(
-          withTiming(0, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
-          withTiming(300, { duration: 3000, easing: Easing.inOut(Easing.ease) })
+          withTiming(0, { duration: 2750, easing: Easing.inOut(Easing.ease) }),
+          withTiming(300, { duration: 2750, easing: Easing.inOut(Easing.ease) })
         ),
         -1, // Infinite loop
         false // No reversing as we handle it manually in sequence
@@ -36,8 +36,8 @@ const HandwrittenText = () => {
 
       textColor.value = withRepeat(
         withSequence(
-          withTiming('#fc3400', { duration: 3000 }),
-          withTiming('white', { duration: 3000 })
+          withTiming('#fc3400', { duration: 2750 }),
+          withTiming('white', { duration: 2750 })
         ),
         -1
       );

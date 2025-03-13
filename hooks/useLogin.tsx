@@ -26,6 +26,10 @@ const useAuth = () => {
 
       if (response.ok) {
         await AsyncStorage.setItem("userName", data.name);
+        await AsyncStorage.setItem("role", data.role);
+        await AsyncStorage.setItem("location", data.location);
+        await AsyncStorage.setItem("isLoggedin", "true");
+
         navigation.navigate("AppContent"); // Navigate to ServerController
       } else {
         Alert.alert("Login Failed", data.message);
@@ -39,6 +43,9 @@ const useAuth = () => {
 
   const logout = async () => {
     await AsyncStorage.removeItem("userName");
+    await AsyncStorage.removeItem("role");
+    await AsyncStorage.removeItem("location");
+    await AsyncStorage.setItem("isLoggedin","false");
     navigation.navigate("LoginScreen"); // Redirect to login screen after logout
   };
 

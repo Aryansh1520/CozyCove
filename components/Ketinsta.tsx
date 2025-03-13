@@ -431,3 +431,16 @@
 // };
 
 // export default ImageFeed;
+
+import React from 'react';
+import { View, Text } from 'react-native';
+
+const ImageFeed = () => {
+  return (
+    <View style={{ flex: 1, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ color: 'white', fontSize: 18 }}>Image Feed</Text>
+    </View>
+  );
+};
+
+export default ImageFeed;

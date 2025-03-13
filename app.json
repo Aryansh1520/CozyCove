@@ -3,14 +3,16 @@
     "name": "Cozy Cove",
     "slug": "LittleHome",
     "version": "1.0.0",
+
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/playstore-icon.png"
     },
     "experiments": {
       "tsconfigPaths": true
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "@react-native-firebase/messaging"
     ],
     "orientation": "portrait",
     "icon": "./assets/playstore-icon.png",
@@ -23,8 +25,10 @@
       "bundleIdentifier": "com.anonymous.LittleHome"
     },
     "android": {
+      "newArchEnabled": true,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/playstore-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.LittleHome"

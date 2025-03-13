@@ -27,7 +27,7 @@ const SplashHandler = ({ navigation }) => {
   useEffect(() => {
     const checkLoginStatus = async () => {
         // Wait for 4.5 seconds (Splash Screen Delay)
-        await new Promise((resolve) => setTimeout(resolve, 4500));
+        await new Promise((resolve) => setTimeout(resolve, 5500));
       
         try {
           // Check if userName exists in AsyncStorage
