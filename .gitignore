@@ -20,6 +20,7 @@ google-services.json
 # Ignore VS Code settings
 .vscode/
 
+
 # Ignore Firebase admin SDK JSON
 cozy-cove-a2698-firebase-adminsdk-fbsvc-04e312cb40.json
 
