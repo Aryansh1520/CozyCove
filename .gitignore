@@ -9,9 +9,21 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+# Ignore APK files
+*.apk
 
+# Ignore certificates (if needed)
+assets/certificates/*.pem
+google-services.json
+# Ignore Firebase config file
+google-services.json
+# Ignore VS Code settings
+.vscode/
 
-.google-services.json
+# Ignore Firebase admin SDK JSON
+cozy-cove-a2698-firebase-adminsdk-fbsvc-04e312cb40.json
+
+google-services.json
 
 ios
 android
