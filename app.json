@@ -12,7 +12,14 @@
     },
     "plugins": [
       "expo-font",
-      "@react-native-firebase/messaging"
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
     ],
     "orientation": "portrait",
     "icon": "./assets/playstore-icon.png",

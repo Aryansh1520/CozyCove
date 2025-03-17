@@ -8,21 +8,13 @@ const API_URL = "https://physically-relaxing-baboon.ngrok-free.app/players";
 
 export const usePlayersOnline = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
-
-  // Function to check login status from AsyncStorage
   const checkLoginStatus = async () => {
     const status = await AsyncStorage.getItem("isLoggedin");
     const loggedIn = status === "true";
     setIsLoggedIn(loggedIn);
-    // console.log("isLoggedIn:", loggedIn);
-
-    // Debugging: Print full AsyncStorage contents
     const allStorageKeys = await AsyncStorage.getAllKeys();
     const storageContents = await AsyncStorage.multiGet(allStorageKeys);
-    // console.log("AsyncStorage Contents:", storageContents);
   };
-
-  // Check login status on mount & when app state changes
   useEffect(() => {
     checkLoginStatus();
 
@@ -31,11 +23,9 @@ export const usePlayersOnline = () => {
         checkLoginStatus();
       }
     });
-
     return () => subscription.remove();
   }, []);
 
-  // Fetch login status before each request
   const query = useQuery({
     queryKey: ["playersOnline"],
     queryFn: async () => {

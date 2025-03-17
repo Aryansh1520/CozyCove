@@ -16,13 +16,14 @@ const useFetchUserImage = () => {
                     return;
                 }
 
-                const response = await fetch(`https://physically-relaxing-baboon.ngrok-free.app/getSnap?username=${encodeURIComponent(storedUserName)}`);
+                const response = await fetch(`https://physically-relaxing-baboon.ngrok-free.app/getSnap?username=${encodeURIComponent(storedUserName)}&t=${Date.now()}`);
 
                 if (!response.ok) {
                     throw new Error("Image not found");
                 }
 
                 setImageUri(response.url);
+                setError(null); // Clear error on success
             } catch (err) {
                 setError(err.message);
             } finally {

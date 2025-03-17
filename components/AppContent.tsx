@@ -34,7 +34,7 @@ const AppContent = () => {
     const appState = useRef(AppState.currentState);
     const insets = useSafeAreaInsets();
     const [exitPopupVisible, setExitPopupVisible] = useState(false);
-    
+
     // Combine these states to reduce re-renders
     const [dimensions, setDimensions] = useState({
         fullHeight: Dimensions.get('screen').height,
@@ -143,7 +143,7 @@ const AppContent = () => {
 
     const handleTabPress = useCallback((tab: TabType) => {
         if (tab === activeTab || isAnimating.current) return;
-        
+
         isAnimating.current = true;
         setActiveTab(tab);
 
@@ -180,30 +180,30 @@ const AppContent = () => {
         const tabs: TabType[] = ['home', 'goal', 'settings', 'profile'];
         const activeIndex = tabs.indexOf(activeTab);
         const screenIndex = tabs.indexOf(screen);
-        
+
         // Only render current screen and adjacent screens
         return Math.abs(activeIndex - screenIndex) <= 1;
     };
 
     return (
         <View style={{ flex: 1, paddingVertical: 2, backgroundColor: 'black', height: contentHeight, paddingBottom: insets.bottom }}>
-            <ExitPopup 
-                visible={exitPopupVisible} 
-                onClose={() => setExitPopupVisible(false)} 
-                onExit={handleExitApp} 
+            <ExitPopup
+                visible={exitPopupVisible}
+                onClose={() => setExitPopupVisible(false)}
+                onExit={handleExitApp}
             />
             <View style={{ backgroundColor: 'black', width: '100%', height: contentHeight }}>
                 {(['home', 'goal', 'settings', 'profile'] as TabType[]).map((screen, index) => (
-                    <Animated.View 
+                    <Animated.View
                         key={screen}
                         style={{
-                            position: 'absolute', 
-                            width: '100%', 
-                            top: 0, 
-                            left: 0, 
-                            height: contentHeight, 
-                            backgroundColor: 'black', 
-                            transform: [{ translateX: getScreenTranslateX(index) }], 
+                            position: 'absolute',
+                            width: '100%',
+                            top: 0,
+                            left: 0,
+                            height: contentHeight,
+                            backgroundColor: 'black',
+                            transform: [{ translateX: getScreenTranslateX(index) }],
                             zIndex: activeTab === screen ? 2 : 1
                         }}
                     >
@@ -221,16 +221,16 @@ const AppContent = () => {
 
             <View style={{ bottom: 0, left: 0, width: '100%', backgroundColor: 'black', flexDirection: 'row', justifyContent: 'space-around', paddingBottom: insets.bottom + 10, height: 80 }}>
                 {(['home', 'goal', 'settings', 'profile'] as TabType[]).map((screen, index) => (
-                    <TouchableOpacity 
-                        key={index} 
-                        onPress={() => handleTabPress(screen)} 
+                    <TouchableOpacity
+                        key={index}
+                        onPress={() => handleTabPress(screen)}
                         onLongPress={hideNavigationBar}
                         activeOpacity={0.7}
                     >
-                        <Icon 
-                            name={['home', 'image-multiple', 'server', 'account'][index]} 
-                            size={28} 
-                            color={activeTab === screen ? 'white' : '#555'} 
+                        <Icon
+                            name={['home', 'bullseye', 'server', 'account'][index]}
+                            size={28}
+                            color={activeTab === screen ? 'white' : '#555'}
                         />
                     </TouchableOpacity>
                 ))}

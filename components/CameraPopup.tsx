@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, Modal, PanResponder } from 're
 import { CameraView, useCameraPermissions, CameraType } from 'expo-camera';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import AsyncStorage from "@react-native-async-storage/async-storage"; 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const POPUP_WIDTH = 368;
 const POPUP_HEIGHT = 316;
@@ -23,7 +23,7 @@ const CameraPopup = ({ onClose }) => {
   const colorUpdateTimeoutRef = useRef(null);
   const sliderRef = useRef(null);
   const viewShotRef = useRef(null);
-  
+
   useEffect(() => {
     if (permission && !permission.granted) {
       requestPermission();
@@ -46,10 +46,10 @@ const CameraPopup = ({ onClose }) => {
     const segmentWidth = sliderWidth / (COLOR_SPECTRUM.length - 1);
     const startIndex = Math.floor(normalizedPosition / segmentWidth);
     const endIndex = Math.min(startIndex + 1, COLOR_SPECTRUM.length - 1);
-    
+
     const startColor = COLOR_SPECTRUM[startIndex];
     const endColor = COLOR_SPECTRUM[endIndex];
-    
+
     const segmentPosition = (normalizedPosition % segmentWidth) / segmentWidth;
 
     const interpolate = (start, end) => Math.round(start + (end - start) * segmentPosition);
@@ -73,7 +73,7 @@ const updateSliderPosition = useCallback((position) => {
     setSliderPosition(clampedPosition);
     setTextColor(getColorFromPosition(clampedPosition));
   }, []);
-  
+
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
     onMoveShouldSetPanResponder: () => true,
@@ -85,7 +85,7 @@ const updateSliderPosition = useCallback((position) => {
       setTextColor(getColorFromPosition(sliderPosition));
     },
   });
-  
+
   const takePicture = async () => {
     if (cameraRef.current) {
       try {
@@ -102,7 +102,7 @@ const updateSliderPosition = useCallback((position) => {
   const useSendImage = () => {
     const sendImage = async (imageUri, username) => {
       const url = "https://physically-relaxing-baboon.ngrok-free.app/uploadSnap";
-  
+
       try {
         const formData = new FormData();
         formData.append("image", {
@@ -112,7 +112,7 @@ const updateSliderPosition = useCallback((position) => {
         });
         console.log(username)
         formData.append("username", username); // Attach username
-  
+
         const response = await fetch(url, {
           method: "POST",
           body: formData,
@@ -120,18 +120,19 @@ const updateSliderPosition = useCallback((position) => {
             "Content-Type": "multipart/form-data",
           },
         });
-  
+
         const result = await response.json();
+        onClose();
         return result;
       } catch (error) {
         console.error("Error sending image:", error);
         return { success: false, error };
       }
     };
-  
+
     return { sendImage };
   };
-  
+
 
 
   const handleSendImage = async () => {
@@ -140,12 +141,12 @@ const updateSliderPosition = useCallback((position) => {
         // Capture the view including image and text
         const uri = await viewShotRef.current.capture();
         console.log("Captured Image URI:", uri);
-  
+
         // Send the captured image to your endpoint
         const { sendImage } = useSendImage();
         const response = await sendImage(uri , userName);
         console.log(response);
-  
+
       } catch (error) {
         console.error("Error capturing image:", error);
       }
@@ -221,7 +222,7 @@ const updateSliderPosition = useCallback((position) => {
                 <TouchableOpacity className="bg-gray-700 p-3 rounded-full" onPress={() => setCapturedImage(null)}>
                   <MaterialIcons name="refresh" size={24} color="white" />
                 </TouchableOpacity>
-                
+
                 {/* Improved slider with better hitbox */}
 {/* Improved slider with better hitbox */}
 <View className="flex-row items-center " style={{ width: middleSliderWidth }}>
@@ -275,7 +276,7 @@ const updateSliderPosition = useCallback((position) => {
                   value={inputText}
                   onChangeText={setInputText}
                 />
-                <TouchableOpacity 
+                <TouchableOpacity
                   className="ml-2 bg-blue-500 p-2 rounded-full"
                   onPress={handleSendImage} // Updated function call
 >

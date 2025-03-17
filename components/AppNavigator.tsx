@@ -41,7 +41,7 @@ const SplashHandler = ({ navigation }) => {
           }
         } catch (error) {
           console.error("Error checking login status:", error);
-          navigation.navigate("LoginScreen"); // Default to login if there's an error
+          navigation.navigate("LoginScreen"); 
         }
       };
       
